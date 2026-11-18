@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plora Captcha Test</title>
+</head>
+<body>
+  <h2>Plora Captcha Test</h2>
+
+  <div id="captcha"></div>
+  <p id="status">Waiting for CAPTCHA...</p>
+
+  <script src="https://plora-captcha.raiyan-ridon.workers.dev/sdk.js"></script>
+  <script>
+    PloraCaptcha.render({
+      container: "#captcha",
+      siteKey: "pc_site_QDU3s3sjEyX_OttfF5mIhOiO",
+      onSuccess: (token) => {
+        document.getElementById("status").textContent =
+          "CAPTCHA passed! Token received.";
+        console.log("CAPTCHA token:", token);
+      }
+    });
+  </script>
+</body>
+</html>
