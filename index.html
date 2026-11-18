@@ -23,31 +23,27 @@
   <div class="brand">⬡ PLORA <span>CAPTCHA TEST LAB</span></div>
   <h1>Test your CAPTCHA integration.</h1>
   <p class="lead">A small browser-side test page for the Plora Captcha SDK. Run a challenge, confirm the callback, and capture the short-lived verification token for your own backend test.</p>
-
   <section class="panel">
     <h2>1. Connection</h2>
     <div id="apiStatus" class="status"><span class="dot"></span><span>Checking Plora Captcha API…</span></div>
     <div id="sdkStatus" class="status"><span class="dot"></span><span>Loading SDK…</span></div>
     <label for="siteKey">Public site key</label>
-    <input id="siteKey" autocomplete="off" spellcheck="false" value="pc_site_QDU3s3sjEyX_OttfF5mIhOiO">
+    <input id="siteKey" autocomplete="off" spellcheck="false" value="pc_site_oGp1Nba6IklO3RofmMezsgwq">
     <p class="tiny">Public site keys are designed for browser use. Never enter your private secret key here.</p>
     <div class="actions"><button id="startBtn" disabled>Start CAPTCHA test</button><button id="resetBtn" class="secondary" disabled>Reset test</button></div>
   </section>
-
   <section class="panel">
     <h2>2. Complete the challenge</h2>
     <p class="muted">Move the slider until the object fits its matching shadow, then press Verify.</p>
     <div id="captcha"><span class="muted">The challenge will appear here.</span></div>
     <div id="challengeStatus" class="status"><span class="dot"></span><span>Waiting for a challenge.</span></div>
   </section>
-
   <section class="panel">
     <h2>3. Token result</h2>
     <div id="result" class="muted">No token received yet.</div>
     <div class="actions"><button id="copyBtn" class="secondary" disabled>Copy token</button></div>
     <p class="tiny">Tokens expire after 120 seconds and can be verified only once. This page does not send tokens or private secrets to any third party.</p>
   </section>
-
   <section class="panel">
     <h2>Important: test server verification separately</h2>
     <ol>
