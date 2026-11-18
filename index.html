@@ -1,26 +1,130 @@
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Plora Captcha Test</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10101a">
+  <title>Plora Captcha — Test Lab</title>
+  <style>
+    :root{color-scheme:dark;--bg:#10101a;--panel:#191827;--line:#343149;--text:#f4f1ff;--muted:#aaa5bf;--accent:#b7a0ff;--good:#7ee0b0;--bad:#ff929b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#302650 0,transparent 55%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+    main{width:min(850px,calc(100% - 32px));margin:42px auto 70px}.brand{font-weight:850;letter-spacing:.12em;color:var(--accent);font-size:13px}.brand span{color:var(--text);letter-spacing:0}
+    h1{font-size:clamp(30px,6vw,48px);line-height:1.08;margin:14px 0}h2{font-size:19px;margin:0 0 10px}.lead,.muted{color:var(--muted)}.lead{max-width:620px}
+    .panel{background:color-mix(in srgb,var(--panel) 94%,transparent);border:1px solid var(--line);border-radius:18px;padding:22px;margin:18px 0;box-shadow:0 16px 45px #0002}
+    label{display:block;font-weight:650;margin:0 0 7px}input{width:100%;background:#10101a;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit}
+    button{border:0;border-radius:10px;padding:11px 16px;background:var(--accent);color:#171225;font:700 14px system-ui;cursor:pointer}button.secondary{background:#2b2940;color:var(--text);border:1px solid #49445f}button:disabled{opacity:.55;cursor:wait}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.status{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#10101a;border:1px solid var(--line);border-radius:10px;margin:10px 0}.dot{width:9px;height:9px;border-radius:50%;background:#777;flex:none}.ok .dot{background:var(--good)}.fail .dot{background:var(--bad)}
+    #captcha{min-height:100px;display:grid;place-items:start;overflow-x:auto;padding:10px 0}#result{overflow-wrap:anywhere;background:#10101a;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px}
+    code{color:#d8ccff}ol{padding-left:21px;color:var(--muted)}li{margin:8px 0}.tiny{font-size:12px;color:var(--muted)}a{color:var(--accent)}
+  </style>
 </head>
 <body>
-  <h2>Plora Captcha Test</h2>
+<main>
+  <div class="brand">⬡ PLORA <span>CAPTCHA TEST LAB</span></div>
+  <h1>Test your CAPTCHA integration.</h1>
+  <p class="lead">A small browser-side test page for the Plora Captcha SDK. Run a challenge, confirm the callback, and capture the short-lived verification token for your own backend test.</p>
 
-  <div id="captcha"></div>
-  <p id="status">Waiting for CAPTCHA...</p>
+  <section class="panel">
+    <h2>1. Connection</h2>
+    <div id="apiStatus" class="status"><span class="dot"></span><span>Checking Plora Captcha API…</span></div>
+    <div id="sdkStatus" class="status"><span class="dot"></span><span>Loading SDK…</span></div>
+    <label for="siteKey">Public site key</label>
+    <input id="siteKey" autocomplete="off" spellcheck="false" value="pc_site_QDU3s3sjEyX_OttfF5mIhOiO">
+    <p class="tiny">Public site keys are designed for browser use. Never enter your private secret key here.</p>
+    <div class="actions"><button id="startBtn" disabled>Start CAPTCHA test</button><button id="resetBtn" class="secondary" disabled>Reset test</button></div>
+  </section>
 
-  <script src="https://plora-captcha.raiyan-ridon.workers.dev/sdk.js"></script>
-  <script>
-    PloraCaptcha.render({
-      container: "#captcha",
-      siteKey: "pc_site_QDU3s3sjEyX_OttfF5mIhOiO",
-      onSuccess: (token) => {
-        document.getElementById("status").textContent =
-          "CAPTCHA passed! Token received.";
-        console.log("CAPTCHA token:", token);
-      }
-    });
-  </script>
+  <section class="panel">
+    <h2>2. Complete the challenge</h2>
+    <p class="muted">Move the slider until the object fits its matching shadow, then press Verify.</p>
+    <div id="captcha"><span class="muted">The challenge will appear here.</span></div>
+    <div id="challengeStatus" class="status"><span class="dot"></span><span>Waiting for a challenge.</span></div>
+  </section>
+
+  <section class="panel">
+    <h2>3. Token result</h2>
+    <div id="result" class="muted">No token received yet.</div>
+    <div class="actions"><button id="copyBtn" class="secondary" disabled>Copy token</button></div>
+    <p class="tiny">Tokens expire after 120 seconds and can be verified only once. This page does not send tokens or private secrets to any third party.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Important: test server verification separately</h2>
+    <ol>
+      <li>Send the token to your own backend over HTTPS.</li>
+      <li>From your backend only, POST to <code>https://plora-captcha.raiyan-ridon.workers.dev/v1/siteverify</code>.</li>
+      <li>Send JSON with <code>secret</code> (your private site secret) and <code>response</code> (the token).</li>
+      <li>Check that the response contains <code>success: true</code>. Try the same token again; the second verification should fail.</li>
+    </ol>
+    <p class="tiny">Do not put the private secret in this GitHub Pages site, JavaScript, or a public repository. GitHub Pages is static hosting and cannot keep server secrets.</p>
+  </section>
+  <p class="tiny">Plora Captcha Test Lab · <a href="https://github.com/Timan-Ridwan/Plotest">Source on GitHub</a></p>
+</main>
+<script src="https://plora-captcha.raiyan-ridon.workers.dev/sdk.js"></script>
+<script>
+(() => {
+  const API = 'https://plora-captcha.raiyan-ridon.workers.dev';
+  const $ = id => document.getElementById(id);
+  let latestToken = '';
+  const paint = (id, message, state='') => {
+    const el = $(id); el.className = 'status ' + state;
+    el.replaceChildren(Object.assign(document.createElement('span'),{className:'dot'}),document.createTextNode(message));
+  };
+  async function checkApi() {
+    try {
+      const response = await fetch(API + '/health', {cache:'no-store'});
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const data = await response.json();
+      paint('apiStatus', data.ok ? 'API reachable — ' + data.service : 'API returned an unexpected response', data.ok ? 'ok' : 'fail');
+    } catch (error) { paint('apiStatus', 'API connection failed: ' + error.message, 'fail'); }
+  }
+  function clearResult() {
+    latestToken = '';
+    $('result').textContent = 'No token received yet.';
+    $('result').className = 'muted';
+    $('copyBtn').disabled = true;
+  }
+  async function start() {
+    clearResult();
+    $('captcha').replaceChildren();
+    paint('challengeStatus','Requesting a new challenge…');
+    $('startBtn').disabled = true;
+    try {
+      if (!window.PloraCaptcha || typeof window.PloraCaptcha.render !== 'function') throw new Error('SDK did not load. Refresh and try again.');
+      const key = $('siteKey').value.trim();
+      if (!key) throw new Error('Enter your public site key.');
+      await window.PloraCaptcha.render({
+        container:'#captcha',
+        siteKey:key,
+        apiUrl:API,
+        onSuccess(token) {
+          latestToken = token;
+          $('result').textContent = 'Success! A token was received. Token length: ' + token.length + ' characters. It expires in about 120 seconds.';
+          $('result').className = '';
+          $('copyBtn').disabled = false;
+          paint('challengeStatus','CAPTCHA passed — success callback received.','ok');
+        }
+      });
+      paint('challengeStatus','Challenge loaded. Complete the slider puzzle.');
+    } catch (error) {
+      paint('challengeStatus',error.message,'fail');
+      $('captcha').textContent = 'Could not load the challenge. Check the site key and registered hostname.';
+    } finally { $('startBtn').disabled = false; }
+  }
+  $('startBtn').addEventListener('click',start);
+  $('resetBtn').addEventListener('click',start);
+  $('copyBtn').addEventListener('click',async()=>{
+    if(!latestToken)return;
+    try { await navigator.clipboard.writeText(latestToken); $('copyBtn').textContent='Copied'; }
+    catch { $('result').textContent='Clipboard unavailable. The token remains in page memory; use a secure local test to capture it.'; }
+  });
+  if(window.PloraCaptcha && typeof window.PloraCaptcha.render === 'function') {
+    paint('sdkStatus','SDK loaded successfully.','ok'); $('startBtn').disabled=false; $('resetBtn').disabled=false;
+  } else {
+    paint('sdkStatus','SDK failed to load. Check the SDK URL or network.','fail');
+  }
+  checkApi();
+})();
+</script>
 </body>
 </html>
